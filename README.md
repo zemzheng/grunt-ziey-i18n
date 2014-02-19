@@ -1,4 +1,4 @@
-grunt-i18n
+grunt-ziey-i18n
 ==========
 
 ### Logs
@@ -15,8 +15,8 @@ Use [artTemplate](https://github.com/aui/artTemplate.git).
 <pre>
  # ### with Git ###
  # cd node_modules
- # git clone https://github.com/zemzheng/grunt-i18n.git
- # cd grunt-i18n
+ # git clone https://github.com/zemzheng/grunt-ziey-i18n.git
+ # cd grunt-ziey-i18n
  # npm install
 </pre>
 
@@ -29,7 +29,7 @@ Use [artTemplate](https://github.com/aui/artTemplate.git).
           + src
               |-- demo.html
           + node_modules 
-              |-- + grunt-i18n 
+              |-- + grunt-ziey-i18n 
     </pre>
 2. Files Detail:
     * Gruntfile.js
@@ -73,7 +73,7 @@ Use [artTemplate](https://github.com/aui/artTemplate.git).
                         }
                     }
                 });
-                grunt.loadNpmTasks('grunt-i18n');
+                grunt.loadNpmTasks('grunt-ziey-i18n');
                 grunt.registerTask('default',  [ 'i18n' ]);
                 grunt.registerTask('gettext',  [ 'i18n:gettext' ]);
                 grunt.registerTask('xgettext', [ 'i18n:xgettext' ]);
@@ -100,7 +100,7 @@ Use [artTemplate](https://github.com/aui/artTemplate.git).
         </pre>
 
 
-3. Run grunt-i18n
+3. Run grunt-ziey-i18n
     <pre> 
         // Run xgettext && gettext 
         # grunt
