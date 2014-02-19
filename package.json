@@ -1,0 +1,30 @@
+{
+  "author": "Zem Zheng <zemzheng@gmail.com>",
+  "name": "grunt-ziey-i18n",
+  "version": "0.1.0",
+  "dependencies": {},
+  "devDependencies": {
+    "art-template": "~2.0.3-rc5"
+  },
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  },
+  "description": "i18n template tools for grunt",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/zemzheng/grunt-ziey-i18n.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zemzheng/grunt-ziey-i18n/issues"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "BSD-2-Clause",
+  "keywords": [
+    "grunt",
+    "i18n"
+  ]
+}
