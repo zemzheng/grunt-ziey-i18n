@@ -20,6 +20,13 @@ Use [artTemplate](https://github.com/aui/artTemplate.git).
  # npm install
 </pre>
 
+OR
+
+<pre>
+ # ### with npm ###
+ # npm install grunt-ziey-i18n
+</pre>
+
 ### Demo
 1. Files tree
     <pre>
