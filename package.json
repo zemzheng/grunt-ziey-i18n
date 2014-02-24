@@ -2,7 +2,9 @@
   "author": "Zem Zheng <zemzheng@gmail.com>",
   "name": "grunt-ziey-i18n",
   "version": "0.1.2",
-  "dependencies": {},
+  "dependencies": {
+    "art-template": "~2.0.3-rc5"
+  },
   "devDependencies": {
     "art-template": "~2.0.3-rc5"
   },
