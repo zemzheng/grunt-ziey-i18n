@@ -1,13 +1,7 @@
 {
   "author": "Zem Zheng <zemzheng@gmail.com>",
   "name": "grunt-ziey-i18n",
-  "version": "0.1.2",
-  "dependencies": {
-    "art-template": "~2.0.3-rc5"
-  },
-  "devDependencies": {
-    "art-template": "~2.0.3-rc5"
-  },
+  "version": "0.1.4",
   "optionalDependencies": {},
   "engines": {
     "node": "*"
@@ -20,13 +14,12 @@
   "bugs": {
     "url": "https://github.com/zemzheng/grunt-ziey-i18n/issues"
   },
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "license": "BSD-2-Clause",
   "keywords": [
     "grunt",
     "i18n"
-  ]
+  ],
+  "dependencies": {
+    "art-template": "~2.0.3-rc5"
+  }
 }

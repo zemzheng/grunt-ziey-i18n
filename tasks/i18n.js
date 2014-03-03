@@ -32,12 +32,16 @@ module.exports = function(grunt) {
         gettext.clear();
 
         // ignore list
-        var ignores = this.data.ignores,
-            i = 0,
-            ii = ignores.length,
-            ignores_dict = {};
-        while (i < ii) {
-            ignores_dict[ignores[i++]] = 1;
+        var isInIgnoresList( name ){
+            var ignores = this.data.ignores,
+                i = 0,
+                ii = ignores.length;
+            while( i < ii ){
+                if( ignores[ i++ ].test( name ) ){
+                    return true;
+                }
+            }
+            return false;
         }
 
         // load po file if exists
@@ -58,6 +62,10 @@ module.exports = function(grunt) {
             );
         }
 
+        template.onerror = function( e ){
+            grunt.log.error( e.name, e.message );
+            throw e;
+        };
         // 按照设置配置 template 
         (function( template, options ){
             var key, setting, helpers;
@@ -93,7 +101,7 @@ module.exports = function(grunt) {
         grunt.log.writeln( '[W] = Write' );
         grunt.log.writeln( '===============================' );
         this.filesSrc.forEach(function(src) {
-            if (ignores_dict[src] || !grunt.file.isFile( src )) return;
+            if ( !grunt.file.isFile( src ) || isInIgnoresList( src ) ) return;
 
             grunt.log.writeln('[T] ' + src);
 
