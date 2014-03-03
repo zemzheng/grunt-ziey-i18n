@@ -32,12 +32,11 @@ module.exports = function(grunt) {
         gettext.clear();
 
         // ignore list
-        var isInIgnoresList( name ){
-            var ignores = this.data.ignores,
-                i = 0,
-                ii = ignores.length;
-            while( i < ii ){
-                if( ignores[ i++ ].test( name ) ){
+        var ignores = this.data.ignores,
+            isInIgnoresList = function( name ){
+            var ii = ignores.length;
+            while( ii ){
+                if( ignores[ --ii ].test( name ) ){
                     return true;
                 }
             }

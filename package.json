@@ -1,11 +1,7 @@
 {
   "author": "Zem Zheng <zemzheng@gmail.com>",
   "name": "grunt-ziey-i18n",
-  "version": "0.1.4",
-  "optionalDependencies": {},
-  "engines": {
-    "node": "*"
-  },
+  "version": "0.1.5",
   "description": "i18n template tools for grunt",
   "repository": {
     "type": "git",
@@ -14,11 +10,8 @@
   "bugs": {
     "url": "https://github.com/zemzheng/grunt-ziey-i18n/issues"
   },
-  "license": "BSD-2-Clause",
-  "keywords": [
-    "grunt",
-    "i18n"
-  ],
+  "license": "MIT",
+  "keywords": [ "grunt", "i18n" ],
   "dependencies": {
     "art-template": "~2.0.3-rc5"
   }
