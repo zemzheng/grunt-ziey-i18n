@@ -2,12 +2,13 @@ grunt-ziey-i18n
 ==========
 
 ### Logs
-* 2014-2-19  Use npm to install artTemplate. Update Readme
+* 2014-05-21 Update, you can set more than one language now, enjoy it.
+* 2014-02-19 Use npm to install artTemplate. Update Readme
              change project name to grunt-ziey-i18n
 * 2013-11-22 Upload
 
 ### About
-You can use Grunt-i18n to make I18N tempalte and todo update your *.po file.
+You can use Grunt-ziey-i18n to make I18N tempalte and todo update your *.po file.
 
 Use [artTemplate](https://github.com/aui/artTemplate.git).
 
@@ -43,47 +44,32 @@ OR
         <pre>
             module.exports = function( grunt ){        
                 grunt.initConfig({
+
                     i18n: {
-                        options : {
-                            template : {
-                                setting : {
-                                    // setting for artTemplate
-                                    // exp. openTag : "[["
-                                },
-                                helpers : {
-                                    // helpers for artTemplate
-                                    // exp. max : function(){Math.max.apply(null,arguments)}
-                                }
-                            }
+                        zh_CN: {
+                            src: [ '../online/static/zh_CN/**' ],
+                            lang: { path: 'lang/zh_CN.po', name: 'zh_CN' }
                         },
-                        gettext: {
-                            action: 'gettext',
-                            src: ['static/*'],
-                            lang: {
-                                path: 'i18n.po',
-                                name: 'en_US'
-                            },
-                            ignores : [
-                                'static/js/jquery-*.js'
-                            ]
+                        en_US: {
+                            src: [ '../online/static/en_US/**' ],
+                            lang: { path: 'lang/en_US.po', name: 'en_US' }
                         },
-                        xgettext : {
-                            action : 'xgettext',
-                            src : ['src/*'],
-                            lang : {
-                                path : 'i18n.po',
-                                name : 'en_US'
-                            },
-                            ignores : [
-                                'src/js/jquery-*.js'
-                            ]
+                        options: {
+                            template: { setting: [Object] },
+                            ignores: [
+                                /jquery[^\.].js/i,
+                                /template.js/,
+                                /bootstrap/i,
+                                /select2\./,
+                                /pnotify/,
+                                /img\//,
+                                /css\//
+                            ] 
                         }
                     }
                 });
                 grunt.loadNpmTasks('grunt-ziey-i18n');
                 grunt.registerTask('default',  [ 'i18n' ]);
-                grunt.registerTask('gettext',  [ 'i18n:gettext' ]);
-                grunt.registerTask('xgettext', [ 'i18n:xgettext' ]);
             };
         </pre>
     * src/demo.html  

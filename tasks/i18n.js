@@ -1,16 +1,11 @@
+require('../libs/string.js');
 var path     = require('path'),
     gettext  = require('../libs/gettext.js'),
+    ignores  = require('../libs/ignores.js'),
+    extend   = require('../libs/extend.js'),
     template = require('art-template');
 
-// -------- gettext ---------
-gettext._.format = function(str, array) {
-    return gettext._(str).replace(/%s/g, function() {
-        return array.shift();
-    });
-};
-// -------- /gettext ---------
 
-// -------- xgettext ---------
 var xgettext = function(str) {
     var outstr = gettext._(str);
     xgettext.dict[str] = outstr === str ? '' : outstr;
@@ -18,117 +13,98 @@ var xgettext = function(str) {
 xgettext.init = function(obj) {
     xgettext.dict = obj || {};
 }
-xgettext.format = xgettext;
-// -------- /xgettext ---------
 
-module.exports = function(grunt) {
+var setTemplate = function( options ){
+    var key, setting, helpers;
 
-    grunt.registerMultiTask('i18n', 'I18n tools', function() {
-
-        var action = this.data.action;
-        if( !action ) return;
-
-        var po_file = path.join(process.cwd(), this.data.lang.path);
-        gettext.clear();
-
-        // ignore list
-        var ignores = this.data.ignores,
-            isInIgnoresList = function( name ){
-            var ii = ignores.length;
-            while( ii ){
-                if( ignores[ --ii ].test( name ) ){
-                    return true;
-                }
-            }
-            return false;
+    if( setting = options.setting ){
+        for( key in setting ){
+            template[ key ] = setting[ key ];
         }
-
-        // load po file if exists
-        grunt.log.writeln( 'Load po file : ' );
-        if( grunt.file.isFile( po_file ) ){
-            gettext.handlePoTxt(
-                this.data.lang.name,
-                grunt.file.read(po_file)
-            );
-            gettext.setLang(this.data.lang.name);
-
-            grunt.log.ok(
-                'Loaded Success : [' + this.data.lang.name + ']' + po_file
-            );
-        } else {
-            return grunt.log.error(
-                'Loaded Failure : [' + this.data.lang.name + ']' + po_file
-            );
+    }
+    if( helpers = options.helpers ){
+        for( key in helpers ){
+            template.helper( key, helpers[ key ] );
         }
-
-        template.onerror = function( e ){
+    }
+};
+var _options = {
+    template : {
+        onerror : function( e ){
             grunt.log.error( e.name, e.message );
             throw e;
-        };
-        // 按照设置配置 template 
-        (function( template, options ){
-            var key, setting, helpers;
-
-            if( setting = options.setting ){
-                for( key in setting ){
-                    template[ key ] = setting[ key ];
-                }
-            }
-            if( helpers = options.helpers ){
-                for( key in helpers ){
-                    template.helper( key, helpers[ key ] );
-                }
-            }
-        })( template, this.options().template );
-
-        switch( action ){
-            case 'gettext': 
-                grunt.log.writeln('i18n:gettext:Translate output...');
-                template.helper('_', gettext._);
-                break;
-            case 'xgettext':
-                grunt.log.writeln('i18n:xgettext:Pick up lang...');
-                xgettext.init();
-                template.helper('_', xgettext);
-                break;
-            default:
-                grunt.log.error('i18n : unknow[' + action + '] : Exit');
-                return;
         }
-        grunt.log.writeln( '===============================' );
-        grunt.log.writeln( '[T] = Translate' );
-        grunt.log.writeln( '[W] = Write' );
-        grunt.log.writeln( '===============================' );
-        this.filesSrc.forEach(function(src) {
-            if ( !grunt.file.isFile( src ) || isInIgnoresList( src ) ) return;
+    }
+}
 
-            grunt.log.writeln('[T] ' + src);
+module.exports = function(grunt) {
+    grunt.registerMultiTask('i18n', 'I18n tools', function() {
+        var options = extend(
+            _options, 
+            this.options(),
+            this.data
+        );
+
+        ignores( options.ignores );
+        setTemplate( options.template );
+
+        var po_file = path.join( process.cwd(), options.lang.path );
+        gettext.clear();
+
+        if( !grunt.file.isFile( po_file ) ){
+            return grunt.log.error(
+                'Error404 : [%s] %s'.sprintf( options.lang.name, po_file )
+            );
+        }
+        gettext.handlePoTxt(
+            options.lang.name,
+            grunt.file.read(po_file)
+        );
+        gettext.setLang( options.lang.name);
+
+        grunt.log.ok(
+            'Load : [%s] %s'.sprintf( options.lang.name, po_file )
+        );
+
+        grunt.log.writeln( "Let's start ".bold );
+        grunt.log.writeln('===============================');
+
+        xgettext.init();
+        this.filesSrc.forEach(function( src ) {
+            
+            if ( ignores.have( src ) || !grunt.file.isFile( src ) ) return;
+
+            grunt.log.writeln( '[Target] %s'.sprintf( src ) );
+            grunt.log.write( '  ' );
 
             var text = grunt.file.read(src);
-            text = ( template.compile(text) )(0);
+            grunt.log.write( '[Read] '.green );
 
-            if( 'gettext' === action ){
-                grunt.log.writeln( '[W] ' +  src );
-                grunt.file.write(src, text);
-            }
+            template.helper('_', xgettext);
+            ( template.compile(text) )(0);
+            grunt.log.write( '[Record] '.green );
+
+            template.helper('_', gettext._);
+            text = ( template.compile(text) )(0);
+            grunt.log.write( '[Translate] '.green );
+
+            grunt.file.write(src, text);
+            grunt.log.write( '[Update] '.green  );
 
             grunt.log.ok('    ... Done');
 
         });
-
-        if( 'xgettext' === action ){
-            var poObj = gettext.getDictByLang( this.data.lang.name ),
-                poTxt;
-
-            for( msgid in poObj ){
-                if( !xgettext.dict[ msgid ] ){                    
-                    xgettext.dict[ msgid ] = poObj[ msgid ];
-                }
+        var poObj = gettext.getDictByLang( this.data.lang.name ),
+            poTxt;
+        for( msgid in poObj ){
+            if( !xgettext.dict[ msgid ] ){                    
+                xgettext.dict[ msgid ] = poObj[ msgid ];
             }
-
-            poTxt = gettext.obj2po( xgettext.dict );
-
-            grunt.file.write( po_file, poTxt );
         }
+        poTxt = gettext.obj2po( xgettext.dict );
+
+        grunt.log.writeln('===============================');
+        grunt.file.write( po_file, poTxt );
+        grunt.log.writeln( '%s update'.sprintf( po_file )  );
     });
 }

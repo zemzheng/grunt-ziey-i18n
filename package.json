@@ -1,7 +1,10 @@
 {
-  "author": "Zem Zheng <zemzheng@gmail.com>",
+  "author": {
+    "name": "Zem Zheng",
+    "email": "zemzheng@gmail.com"
+  },
   "name": "grunt-ziey-i18n",
-  "version": "0.1.5",
+  "version": "1.0.0",
   "description": "i18n template tools for grunt",
   "repository": {
     "type": "git",
@@ -11,8 +14,13 @@
     "url": "https://github.com/zemzheng/grunt-ziey-i18n/issues"
   },
   "license": "MIT",
-  "keywords": [ "grunt", "i18n" ],
+  "keywords": [
+    "grunt",
+    "i18n"
+  ],
   "dependencies": {
     "art-template": "~2.0.3-rc5"
-  }
+  },
+  "readme": "You can use Grunt-ziey-i18n to make I18N tempalte and todo update your *.po file.",
+  "readmeFilename": "README.md"
 }
