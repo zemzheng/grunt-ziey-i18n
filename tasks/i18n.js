@@ -6,44 +6,46 @@ var path     = require('path'),
     template = require('art-template');
 
 
-var xgettext = function(str) {
-    var outstr = gettext._(str);
-    xgettext.dict[str] = outstr === str ? '' : outstr;
-}
-xgettext.init = function(obj) {
-    xgettext.dict = obj || {};
-}
-
-var setTemplate = function( options ){
-    var key, setting, helpers;
-
-    if( setting = options.setting ){
-        for( key in setting ){
-            template[ key ] = setting[ key ];
-        }
-    }
-    if( helpers = options.helpers ){
-        for( key in helpers ){
-            template.helper( key, helpers[ key ] );
-        }
-    }
-};
-var _options = {
-    template : {
-        onerror : function( e ){
-            grunt.log.error( e.name, e.message );
-            throw e;
-        }
-    }
-}
-
 module.exports = function(grunt) {
+
+    var xgettext = function(str) {
+        var outstr = gettext._(str);
+        xgettext.dict[str] = outstr === str ? '' : outstr;
+    }
+    xgettext.init = function(obj) {
+        xgettext.dict = obj || {};
+    }
+
+    var setTemplate = function( options ){
+        var key, setting, helpers;
+
+        if( setting = options.setting ){
+            for( key in setting ){
+                template[ key ] = setting[ key ];
+            }
+        }
+        if( helpers = options.helpers ){
+            grunt.log.warn( "[WARN] It's better not to use helpers in i18n template" );
+            for( key in helpers ){
+                template.helper( key, helpers[ key ] );
+            }
+        }
+    };
+
+    // 默认不转义
+    template.isEscape = false;
+
+    // 默认错误输出
+    template.onerror = function( e ){
+        var result = e.name + ' -> ' + e.message + ' @' + e.id;
+        if( undefined !== e.line ) result += ':' + e.line;
+        grunt.log.error( '[Error]', result );
+        throw e;
+    };
+
     grunt.registerMultiTask('i18n', 'I18n tools', function() {
-        var options = extend(
-            _options, 
-            this.options(),
-            this.data
-        );
+        var inputOptions = this.options(),
+            options = extend( {}, inputOptions, this.data );
 
         ignores( options.ignores );
         setTemplate( options.template );
@@ -53,7 +55,7 @@ module.exports = function(grunt) {
 
         if( !grunt.file.isFile( po_file ) ){
             return grunt.log.error(
-                'Error404 : [%s] %s'.sprintf( options.lang.name, po_file )
+                '[Error] 404 : [%s] %s'.sprintf( options.lang.name, po_file )
             );
         }
         gettext.handlePoTxt(
@@ -81,11 +83,11 @@ module.exports = function(grunt) {
             grunt.log.write( '[Read] '.green );
 
             template.helper('_', xgettext);
-            ( template.compile(text) )(0);
+            ( template.compile( src, text ) )(0);
             grunt.log.write( '[Record] '.green );
 
             template.helper('_', gettext._);
-            text = ( template.compile(text) )(0);
+            text = ( template.compile( src, text) )(0);
             grunt.log.write( '[Translate] '.green );
 
             grunt.file.write(src, text);

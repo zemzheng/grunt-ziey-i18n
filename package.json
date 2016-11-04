@@ -1,26 +1,26 @@
 {
-  "author": {
-    "name": "Zem Zheng",
-    "email": "zemzheng@gmail.com"
-  },
-  "name": "grunt-ziey-i18n",
-  "version": "1.0.0",
-  "description": "i18n template tools for grunt",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/zemzheng/grunt-ziey-i18n.git"
-  },
-  "bugs": {
-    "url": "https://github.com/zemzheng/grunt-ziey-i18n/issues"
-  },
-  "license": "MIT",
-  "keywords": [
-    "grunt",
-    "i18n"
-  ],
-  "dependencies": {
-    "art-template": "~2.0.3-rc5"
-  },
-  "readme": "You can use Grunt-ziey-i18n to make I18N tempalte and todo update your *.po file.",
-  "readmeFilename": "README.md"
+    "author": {
+        "name": "Zem Zheng",
+        "email": "zemzheng@gmail.com"
+    },
+    "name": "grunt-ziey-i18n",
+    "version": "1.0.5",
+    "description": "i18n template tools for grunt",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/zemzheng/grunt-ziey-i18n.git"
+    },
+    "bugs": {
+        "url": "https://github.com/zemzheng/grunt-ziey-i18n/issues"
+    },
+    "license": "MIT",
+    "keywords": [
+        "grunt",
+        "i18n"
+    ],
+    "dependencies": {
+        "art-template": "~2.0.3-rc5"
+    },
+    "readme": "grunt-ziey-i18n\n==========\n\n### Logs\n* 2014-05-21 Update, you can set more than one language now, enjoy it.\n* 2014-02-19 Use npm to install artTemplate. Update Readme\n             change project name to grunt-ziey-i18n\n* 2013-11-22 Upload\n\n### About\nYou can use Grunt-ziey-i18n to make I18N tempalte and todo update your *.po file.\n\nUse [artTemplate](https://github.com/aui/artTemplate.git).\n\n### Install / 安装\n<pre>\n # ### with Git ###\n # cd node_modules\n # git clone https://github.com/zemzheng/grunt-ziey-i18n.git\n # cd grunt-ziey-i18n\n # npm install\n</pre>\n\nOR\n\n<pre>\n # ### with npm ###\n # npm install grunt-ziey-i18n\n</pre>\n\n### Demo\n1. Files tree\n    <pre>\n          Gruntfile.js\n          i18n.po\n          + static\n          + src\n              |-- demo.html\n          + node_modules \n              |-- + grunt-ziey-i18n \n    </pre>\n2. Files Detail:\n    * Gruntfile.js\n        <pre>\n            module.exports = function( grunt ){        \n                grunt.initConfig({\n\n                    i18n: {\n                        zh_CN: {\n                            src: [ '../online/static/zh_CN/**' ],\n                            lang: { path: 'lang/zh_CN.po', name: 'zh_CN' }\n                        },\n                        en_US: {\n                            src: [ '../online/static/en_US/**' ],\n                            lang: { path: 'lang/en_US.po', name: 'en_US' }\n                        },\n                        options: {\n                            template: {\n                                setting: {\n                                    openTag  : '<%',\n                                    closeTag : '%>',\n                                    isEscape : false, // 是否转义 html， 默认忽略\n                                },\n                                helpers : { // 不建议使用\n                                    <func_name> : function(){ ... } // 辅助方法\n                                },\n                            },\n                            ignores: [\n                                /jquery[^\\.].js/i,\n                                /template.js/,\n                                /bootstrap/i,\n                                /select2\\./,\n                                /pnotify/,\n                                /img\\//,\n                                /css\\//\n                            ] \n                        }\n                    }\n                });\n                grunt.loadNpmTasks('grunt-ziey-i18n');\n                grunt.registerTask('default',  [ 'i18n' ]);\n            };\n        </pre>\n    * src/demo.html  \n        <pre>\n            &lt;%= _('Hello') %&gt;\n            &lt;%= _('World') %&gt;\n        </pre>\n    * i18n.po\n        <pre>\n            msgid \"\"\n            msgstr \"\"\n            \"MIME-Version: 1.0\\n\"\n            \"Content-Type: text/plain; charset=UTF-8\\n\"\n            \"Content-Transfer-Encoding: 8bit\\n\"\n            \n            msgid \"Hello\"\n            msgstr \"你好\"\n\n            msgid \"Hey\"\n            msgstr \"喂\"\n        </pre>\n\n\r\n3. Run grunt-ziey-i18n\n    <pre> \n        // Run xgettext && gettext \n        # grunt\n\n        // Run xgettext only \n        // # grunt xgettext\n        \n        // Run gettext only \n        // # grunt gettext      \n    </pre>\n\n4. Result\n    * static/demo.html  \n        <pre>\n            你好\n            Wrold\n        </pre>\n    * i18n.po\n        <pre>\n            msgid \"\"\n            msgstr \"\"\n            \"MIME-Version: 1.0\\n\"\n            \"Content-Type: text/plain; charset=UTF-8\\n\"\n            \"Content-Transfer-Encoding: 8bit\\n\"\n            \n            msgid \"Hello\"\n            msgstr \"你好\"\n\n            msgid \"World\"\n            msgstr \"\"\n\n            msgid \"Hey\"\n            msgstr \"喂\"\n        </pre>\n\n\n",
+    "readmeFilename": "README.md"
 }

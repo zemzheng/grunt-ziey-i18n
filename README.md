@@ -55,7 +55,16 @@ OR
                             lang: { path: 'lang/en_US.po', name: 'en_US' }
                         },
                         options: {
-                            template: { setting: [Object] },
+                            template: {
+                                setting: {
+                                    openTag  : '<%',
+                                    closeTag : '%>',
+                                    isEscape : false, // 是否转义 html， 默认忽略
+                                },
+                                helpers : { // 不建议使用
+                                    <func_name> : function(){ ... } // 辅助方法
+                                },
+                            },
                             ignores: [
                                 /jquery[^\.].js/i,
                                 /template.js/,
